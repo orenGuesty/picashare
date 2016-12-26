@@ -2,6 +2,8 @@
  * Created by oren on 15/12/2016.
  */
 import React from 'react';
+import { Link } from 'react-router';
+
 import axios from 'axios';
 import FontAwesome from 'react-fontawesome';
 import FacebookLogin from 'react-facebook-login';
@@ -91,9 +93,12 @@ class Header extends React.Component { // eslint-disable-line react/prefer-state
           />
           <span> Login with Instagram</span>
         </InstagramLogin>
-        <button onClick={this.twitterAuth}>
-          <img src="https://g.twimg.com/dev/sites/default/files/images_documentation/sign-in-with-twitter-gray.png" alt="my" />
-        </button>
+        <Link to="/categories">
+          <button onClick={this.twitterAuth}>
+            <img src="https://g.twimg.com/dev/sites/default/files/images_documentation/sign-in-with-twitter-gray.png" alt="my" />
+          </button>
+        </Link>
+
       </div>
     );
   }
