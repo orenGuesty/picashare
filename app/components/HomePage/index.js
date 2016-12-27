@@ -23,7 +23,7 @@ firebase.initializeApp(config);
 
 const twitterProvider = new firebase.auth.TwitterAuthProvider();
 const fbProvider = new firebase.auth.FacebookAuthProvider();
-
+const googleProvider = new firebase.auth.GoogleAuthProvider();
 
 class Header extends React.Component { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
@@ -73,6 +73,11 @@ class Header extends React.Component { // eslint-disable-line react/prefer-state
             cookie.save('facebookToken', token, { path: '/' });
             console.log(`Facebook user details are : ${JSON.stringify(cookie.load('facebookUser'))}`);
             return;
+          case 'google.com':
+            cookie.save('googleUser', user, { path: '/' });
+            cookie.save('googleToken', token, { path: '/' });
+            console.log(`Google user details are : ${JSON.stringify(cookie.load('googleUser'))}`);
+            return;
           default:
             cookie.save('user', user, { path: '/' });
             cookie.save('token', token, { path: '/' });
@@ -114,6 +119,10 @@ class Header extends React.Component { // eslint-disable-line react/prefer-state
         <Link to="/categories">
           <button onClick={() => this.snAuth(twitterProvider)}>
             <img src="https://firebasestorage.googleapis.com/v0/b/picashare-7bc92.appspot.com/o/signInTwitter.jpg?alt=media&token=b6afc894-fdb9-42e9-a33e-3042b4782101" alt="my" />
+          </button>
+        </Link><Link to="/categories">
+          <button onClick={() => this.snAuth(googleProvider)}>
+            <img src="https://firebasestorage.googleapis.com/v0/b/picashare-7bc92.appspot.com/o/signInGoogle.png?alt=media&token=e5af818c-1fa6-4bde-8e4b-c1c96a821175" alt="my" />
           </button>
         </Link>
       </div>
