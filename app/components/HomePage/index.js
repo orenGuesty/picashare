@@ -61,29 +61,11 @@ class Header extends React.Component { // eslint-disable-line react/prefer-state
         const secret = result.credential.secret;
 */
         const user = result.user;
-        const providerId = user.providerData[0].providerId;
-        switch (providerId) {
-          case 'twitter.com':
-            cookie.save('twitterUser', user, { path: '/' });
-            cookie.save('twitterToken', token, { path: '/' });
-            console.log(`Twitter user details are : ${JSON.stringify(cookie.load('twitterUser'))}`);
-            return;
-          case 'facebook.com':
-            cookie.save('facebookUser', user, { path: '/' });
-            cookie.save('facebookToken', token, { path: '/' });
-            console.log(`Facebook user details are : ${JSON.stringify(cookie.load('facebookUser'))}`);
-            return;
-          case 'google.com':
-            cookie.save('googleUser', user, { path: '/' });
-            cookie.save('googleToken', token, { path: '/' });
-            console.log(`Google user details are : ${JSON.stringify(cookie.load('googleUser'))}`);
-            return;
-          default:
-            cookie.save('user', user, { path: '/' });
-            cookie.save('token', token, { path: '/' });
-            console.log(`user details are : ${JSON.stringify(cookie.load('user'))}`);
-            return;
-        }
+        let providerId = user.providerData[0].providerId;
+        providerId = providerId.substring(0, providerId.indexOf('.'));
+        cookie.save(`${providerId}User`, user, { path: '/' });
+        cookie.save(`${providerId}Token`, token, { path: '/' });
+        console.log(`${providerId} user details are : ${JSON.stringify(cookie.load(`${providerId}User`))}`);
       }).catch((error) => {
         const errorCode = error.code;
 /*
