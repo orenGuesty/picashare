@@ -197,6 +197,8 @@
     "lodash": "4.16.4",
     "minimist": "1.2.0",
     "react": "15.3.2",
+    "react-bootstrap": "^0.30.7",
+    "react-cookie": "^1.0.4",
     "react-dom": "15.3.2",
     "react-facebook-login": "^3.4.1",
     "react-fontawesome": "^1.5.0",

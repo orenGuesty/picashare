@@ -6,15 +6,11 @@ import { Link } from 'react-router';
 
 import axios from 'axios';
 import FontAwesome from 'react-fontawesome';
-import FacebookLogin from 'react-facebook-login';
 import * as firebase from 'firebase';
 import InstagramLogin from 'react-instagram-login';
 import ReactPlayer from 'react-player';
+import cookie from 'react-cookie';
 
-
-const responseFacebook = (response) => {
-  console.log(response);
-};
 
 const config = {
   apiKey: 'AIzaSyDOc48VJls4dUJ26DepEtmQw9JUssWSTw0',
@@ -26,17 +22,22 @@ const config = {
 firebase.initializeApp(config);
 
 const twitterProvider = new firebase.auth.TwitterAuthProvider();
+const fbProvider = new firebase.auth.FacebookAuthProvider();
 
 
 class Header extends React.Component { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
     super(props);
     this.state = {
-      user: {},
+      user: cookie.load('user') || cookie.load('twitterUser') || cookie.load('facebookUser'),
+      token: cookie.load('token') || cookie.load('twitterToken') || cookie.load('facebookToken'),
+      providers: [],
+      isUserLoggedIn: false,
     };
     this.instaClientId = '0be105da5eec4aaa8e304c7b25f2dd0e';
     this.UriRedirect = 'localhost:3000/';
   }
+
 
   componentWillUpdate(nextProps, nextState) {
     if (nextState.user !== this.state.user) {
@@ -51,16 +52,33 @@ class Header extends React.Component { // eslint-disable-line react/prefer-state
         });
     }
   }
-  twitterAuth = () => {
+  snAuth = (provider) => {
     firebase.auth()
-      .signInWithPopup(twitterProvider)
+      .signInWithPopup(provider)
       .then((result) => {
-/*
         const token = result.credential.accessToken;
+/*
         const secret = result.credential.secret;
 */
         const user = result.user;
-        console.log(`twitter user detials are : ${JSON.stringify(user)}`);
+        const providerId = user.providerData[0].providerId;
+        switch (providerId) {
+          case 'twitter.com':
+            cookie.save('twitterUser', user, { path: '/' });
+            cookie.save('twitterToken', token, { path: '/' });
+            console.log(`Twitter user details are : ${JSON.stringify(cookie.load('twitterUser'))}`);
+            return;
+          case 'facebook.com':
+            cookie.save('facebookUser', user, { path: '/' });
+            cookie.save('facebookToken', token, { path: '/' });
+            console.log(`Facebook user details are : ${JSON.stringify(cookie.load('facebookUser'))}`);
+            return;
+          default:
+            cookie.save('user', user, { path: '/' });
+            cookie.save('token', token, { path: '/' });
+            console.log(`user details are : ${JSON.stringify(cookie.load('user'))}`);
+            return;
+        }
       }).catch((error) => {
         const errorCode = error.code;
 /*
@@ -72,18 +90,13 @@ class Header extends React.Component { // eslint-disable-line react/prefer-state
       });
   }
 
+
   render() {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
         <ReactPlayer url="https://www.youtube.com/watch?v=ysz5S6PUM-U" playing />
-        <FacebookLogin
-          appId="358317097861350"
-          autoLoad
-          buttonStyle={{ fontSize: 12 }}
-          callback={responseFacebook}
-          icon="fa-facebook"
-        />
-        <InstagramLogin
+
+        { false && <InstagramLogin
           clientId={this.instaClientId}
           onSuccess={(response) => { this.setState({ user: response }); }}
           onFailure={(response) => { this.setState({ user: response }); }}
@@ -92,16 +105,21 @@ class Header extends React.Component { // eslint-disable-line react/prefer-state
             name="instagram"
           />
           <span> Login with Instagram</span>
-        </InstagramLogin>
+        </InstagramLogin>}
         <Link to="/categories">
-          <button onClick={this.twitterAuth}>
-            <img src="https://g.twimg.com/dev/sites/default/files/images_documentation/sign-in-with-twitter-gray.png" alt="my" />
+          <button onClick={() => this.snAuth(fbProvider)}>
+            <img src="https://firebasestorage.googleapis.com/v0/b/picashare-7bc92.appspot.com/o/signInFB.png?alt=media&token=37bfb887-2167-4760-903c-9b3bcfd985ba" alt="my" />
           </button>
         </Link>
-
+        <Link to="/categories">
+          <button onClick={() => this.snAuth(twitterProvider)}>
+            <img src="https://firebasestorage.googleapis.com/v0/b/picashare-7bc92.appspot.com/o/signInTwitter.jpg?alt=media&token=b6afc894-fdb9-42e9-a33e-3042b4782101" alt="my" />
+          </button>
+        </Link>
       </div>
     );
   }
+
 }
 
 export default Header;
