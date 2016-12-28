@@ -51,6 +51,7 @@ class Login extends React.Component { // eslint-disable-line react/prefer-statel
          const secret = result.credential.secret;
          */
         const user = result.user;
+        this.props.addUser(user);
         let providerId = user.providerData[0].providerId;
         providerId = providerId.substring(0, providerId.indexOf('.'));
         cookie.save(`${providerId}User`, user, { path: '/' });

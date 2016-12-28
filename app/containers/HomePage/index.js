@@ -14,6 +14,13 @@ import Header from '../../components/HomePage/index';
 import Login from '../../components/Login/index';
 import * as firebase from 'firebase';
 
+import { addUser } from './actions';
+import { selectUser } from './selectors';
+import { createStructuredSelector } from 'reselect';
+import { connect } from 'react-redux';
+
+
+
 
 const config = {
   apiKey: 'AIzaSyDOc48VJls4dUJ26DepEtmQw9JUssWSTw0',
@@ -22,17 +29,31 @@ const config = {
   storageBucket: 'picashare-7bc92.appspot.com',
   messagingSenderId: '536716819192',
 };
-firebase.initializeApp(config)
+firebase.initializeApp(config);
 
-export default class HomePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+export class HomePage extends React.PureComponent {
   render() {
     return (
       <h1>
         <Header />
-        <Login />
+        <Login addUser = {this.props.addUser} selectUser = {this.props.user} />
       </h1>
     );
   }
 }
 
+HomePage.propTypes = {
+  addUser: React.PropTypes.func,
+};
 
+export function mapDispatchToProps(dispatch) {
+  return {
+    addUser: (userData) => dispatch(addUser(userData)),
+  };
+}
+
+const mapStateToProps = createStructuredSelector({
+  user: selectUser(),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomePage);
