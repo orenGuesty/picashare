@@ -10,8 +10,6 @@ import * as firebase from 'firebase';
 import InstagramLogin from 'react-instagram-login';
 import cookie from 'react-cookie';
 
-
-
 const twitterProvider = new firebase.auth.TwitterAuthProvider();
 const fbProvider = new firebase.auth.FacebookAuthProvider();
 const googleProvider = new firebase.auth.GoogleAuthProvider();
@@ -58,14 +56,14 @@ class Login extends React.Component { // eslint-disable-line react/prefer-statel
         cookie.save(`${providerId}Token`, token, { path: '/' });
         console.log(`${providerId} user details are : ${JSON.stringify(cookie.load(`${providerId}User`))}`);
       }).catch((error) => {
-      const errorCode = error.code;
-      /*
-       const errorMessage = error.message;
-       const email = error.email;
-       const credential = error.credential;
-       */
-      console.log(`error code : ${errorCode}`);
-    });
+        const errorCode = error.code;
+        /*
+         const errorMessage = error.message;
+         const email = error.email;
+         const credential = error.credential;
+         */
+        console.log(`error code : ${errorCode}`);
+      });
   }
 
 
@@ -103,4 +101,7 @@ class Login extends React.Component { // eslint-disable-line react/prefer-statel
 
 }
 
+Login.propTypes = {
+  addUser: React.PropTypes.func,
+};
 export default Login;

@@ -20,8 +20,6 @@ import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 
 
-
-
 const config = {
   apiKey: 'AIzaSyDOc48VJls4dUJ26DepEtmQw9JUssWSTw0',
   authDomain: 'picashare-7bc92.firebaseapp.com',
@@ -36,7 +34,7 @@ export class HomePage extends React.PureComponent {
     return (
       <h1>
         <Header />
-        <Login addUser = {this.props.addUser} selectUser = {this.props.user} />
+        <Login addUser={this.props.addUser} selectUser={this.props.user} />
       </h1>
     );
   }
@@ -44,6 +42,7 @@ export class HomePage extends React.PureComponent {
 
 HomePage.propTypes = {
   addUser: React.PropTypes.func,
+  user: React.PropTypes.func,
 };
 
 export function mapDispatchToProps(dispatch) {

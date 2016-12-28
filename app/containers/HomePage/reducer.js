@@ -14,12 +14,14 @@ import {
   CHANGE_USERNAME,
   ADD_USER,
 } from './constants';
-import { fromJS } from 'immutable';
+import { Record, Map, fromJS } from 'immutable';
 
 // The initial state of the App
-const initialState = fromJS({
+const immutableRecord = Record;
+const immutableMap = Map;
+const initialState = immutableRecord({
   username: '',
-  user: null,
+  user: immutableMap(),
 });
 
 function homeReducer(state = initialState, action) {
@@ -29,7 +31,7 @@ function homeReducer(state = initialState, action) {
       return state
         .set('username', action.name.replace(/@/gi, ''));
     case ADD_USER:
-      return state.set('user', action.data);
+      return state.set('user', fromJS(action.data));
     default:
       return state;
   }
