@@ -11,13 +11,28 @@
 
 import React from 'react';
 import Header from '../../components/HomePage/index';
+import Login from '../../components/Login/index';
+import * as firebase from 'firebase';
+
+
+const config = {
+  apiKey: 'AIzaSyDOc48VJls4dUJ26DepEtmQw9JUssWSTw0',
+  authDomain: 'picashare-7bc92.firebaseapp.com',
+  databaseURL: 'https://picashare-7bc92.firebaseio.com',
+  storageBucket: 'picashare-7bc92.appspot.com',
+  messagingSenderId: '536716819192',
+};
+firebase.initializeApp(config)
 
 export default class HomePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   render() {
     return (
       <h1>
         <Header />
+        <Login />
       </h1>
     );
   }
 }
+
+
